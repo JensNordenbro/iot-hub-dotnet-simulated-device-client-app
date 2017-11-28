@@ -38,7 +38,7 @@
                 await _deviceClient.SendEventAsync(message);
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, messageString);
 
-                await Task.Delay(1000);
+                await Task.Delay(10000);
             }
         }
 
