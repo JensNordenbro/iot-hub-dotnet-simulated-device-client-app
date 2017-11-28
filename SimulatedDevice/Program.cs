@@ -8,8 +8,8 @@
 
     public class Program
     {
-        private const string IotHubUri = "{iot hub hostname}";
-        private const string DeviceKey = "{device key}";
+        private const string IotHubUri = "hton.azure-devices.net";
+        private const string DeviceKey = "lZvsotUeMRZ8pyYM+WLxuQZDtRvMKVSckU6Gp9IBaVY=";
         private const string DeviceId = "myFirstDevice";
         private const double MinTemperature = 20;
         private const double MinHumidity = 60;

@@ -9,7 +9,7 @@
 
     public class Program
     {
-        private const string ConnectionString = "{iothub connection string}";
+        private const string ConnectionString = "HostName=hton.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=NRps9y34wgn0OTHBlVztRSudxB6lkEmb4Wm5v1GpHcc=";
         private const string IotHubD2CEndpoint = "messages/events";
         private static EventHubClient _eventHubClient;
 

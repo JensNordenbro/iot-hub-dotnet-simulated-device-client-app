@@ -10,7 +10,8 @@
     public class Program
     {
         private static RegistryManager _registryManager;
-        private const string ConnectionString = "{iot hub connection string}";
+
+        private const string ConnectionString = "HostName=hton.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=NRps9y34wgn0OTHBlVztRSudxB6lkEmb4Wm5v1GpHcc=";
         private const string Name = "createdeviceidentity";
         private const string DeviceId = "myFirstDevice";
         private const string TelemetryKey = "telemetry";
