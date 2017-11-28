@@ -1,0 +1,5 @@
+https://docs.microsoft.com/sv-se/azure/iot-hub/iot-hub-csharp-csharp-getstarted
+
+
+
+https://docs.microsoft.com/en-us/azure/stream-analytics/stream-analytics-machine-learning-anomaly-detection
