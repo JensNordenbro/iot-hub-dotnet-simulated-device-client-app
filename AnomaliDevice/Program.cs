@@ -9,9 +9,12 @@
     public class Program
     {
         private const string IotHubUri = "hton.azure-devices.net";
+
         private const string DeviceKey = "lZvsotUeMRZ8pyYM+WLxuQZDtRvMKVSckU6Gp9IBaVY=";
         private const string DeviceId = "myFirstDevice";
-        private const double MinTemperature = 20;
+        //private const string DeviceKey = "TT+24WpGw+WDfSGlbhs065TFTxFD78Rx5BhAEoyAS0Q=";
+        //private const string DeviceId = "anomaliDevice";
+        private const double MinTemperature = 80;
         private const double MinHumidity = 60;
         private static readonly Random Rand = new Random();
         private static DeviceClient _deviceClient;
@@ -38,13 +41,13 @@
                 await _deviceClient.SendEventAsync(message);
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, messageString);
 
-                await Task.Delay(1000);
+                await Task.Delay(60 *1000);
             }
         }
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("Simulated device\n");
+            Console.WriteLine("Anomali device\n");
             _deviceClient = DeviceClient.Create(IotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(DeviceId, DeviceKey), TransportType.Mqtt);
 
             SendDeviceToCloudMessagesAsync();
