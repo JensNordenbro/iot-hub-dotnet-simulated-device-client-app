@@ -40,6 +40,7 @@
                 }
 
                 {
+                    Console.Beep();
                     Console.WriteLine("Doing 2 anomalies");
                     var currentTemperature = 80;
                     var currentHumidity = MinHumidity + Rand.NextDouble() * 20;
