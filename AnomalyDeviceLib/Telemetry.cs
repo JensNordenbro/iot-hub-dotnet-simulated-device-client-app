@@ -27,17 +27,21 @@
         {
             while (true)
             {
-                {
+                try{
 
                     var currentTemperature = valueContainer.Value + Rand.NextDouble() * valueContainer.Deviation;
                     var currentHumidity = MinHumidity + Rand.NextDouble() * 20;
-                    valueContainer.Pingback(currentTemperature);
+                    
                     await SendTelemetryData(currentTemperature, currentHumidity);
+
+                    valueContainer.Pingback(currentTemperature);
 
                     await Task.Delay(1000);
                 }
-
-               
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
 
         }
