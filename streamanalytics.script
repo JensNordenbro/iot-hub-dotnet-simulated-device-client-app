@@ -1,0 +1,133 @@
+
+/* https://docs.microsoft.com/en-us/azure/stream-analytics/stream-analytics-machine-learning-anomaly-detection */
+WITH AggregationStep AS 
+(
+     SELECT
+           System.Timestamp as tumblingWindowEnd,
+       /*    deviceId, */
+           /* messageId, går ju inte om man medelvärdesbildar*/
+           AVG(temperature) as avgValue
+     FROM iothubstream
+     GROUP BY /*deviceId, */TumblingWindow(second, 5)
+),
+
+FillInMissingValuesStep AS
+(
+      SELECT
+            System.Timestamp AS hoppingWindowEnd,
+           /* deviceId,*/
+
+            TopOne() OVER (ORDER BY tumblingWindowEnd DESC) AS lastEvent
+     FROM AggregationStep
+     GROUP BY /*deviceId,*/ HOPPINGWINDOW(second, 300, 5)
+),
+
+AnomalyDetectionStep AS
+(
+
+      SELECT
+            system.timestamp as time,
+            /*deviceId,*/
+
+            /*hoppingWindowEnd,
+            lastEvent.tumblingWindowEnd as lastTumblingWindowEnd,*/
+            lastEvent.avgValue as lastEventAvgValue,
+            
+            ANOMALYDETECTION(lastEvent.avgValue) OVER (/*PARTITION BY deviceId*/ LIMIT DURATION(minute, 1)) as
+            scores
+
+      FROM FillInMissingValuesStep
+),
+
+FlattenedData AS 
+(
+    SELECT 
+        time,
+        /*deviceId,*/
+
+       /*hoppingWindowEnd,*/
+       
+        lastEventAvgValue,
+        
+        CAST(GetRecordPropertyValue(scores, 'BiLevelChangeScore') as float) as BitLevelChangeScore,
+        CAST(GetRecordPropertyValue(scores, 'SlowPosTrendScore') as float) as SlowPosTrendScore,
+        CAST(GetRecordPropertyValue(scores, 'SlowNegTrendScore') as float) as SlowNegTrendScore    
+    
+    FROM
+    AnomalyDetectionStep
+),
+SpikeAlerts AS
+(
+    SELECT
+        alert='Spike Anomaly detected',
+        *
+        
+        FROM 
+        FlattenedData
+        WHERE
+            BitLevelChangeScore >= 3.25
+
+),
+PositiveTrendAlerts AS
+(
+    SELECT
+        alert='Positive Trend detected',
+        *
+        
+        FROM 
+        FlattenedData
+        WHERE
+            SlowPosTrendScore >= 3.25
+
+),
+NegativeTrendAlerts AS
+(
+    SELECT
+        alert='Negative Trend detected',
+        *
+        
+        FROM 
+        FlattenedData
+        WHERE
+            SlowNegTrendScore >= 3.25
+
+),
+AllAlerts AS
+(
+    SELECT * 
+    FROM SpikeAlerts
+    UNION
+    SELECT * FROM
+    PositiveTrendAlerts
+    UNION
+    SELECT * FROM
+    NegativeTrendAlerts
+)
+
+SELECT *
+INTO log
+FROM FlattenedData
+
+SELECT *
+INTO sqloutput
+FROM
+AllAlerts
+
+/*
+
+SELECT
+      alert = 'common Anomaly detected',
+
+      lastEventAvgValue,
+      time,
+      CAST(GetRecordPropertyValue(scores, 'BiLevelChangeScore') as float) as BitLevelChangeScore,
+      CAST(GetRecordPropertyValue(scores, 'SlowPosTrendScore') as float) as SlowPosTrendScore,
+      CAST(GetRecordPropertyValue(scores, 'SlowNegTrendScore') as float) as SlowNegTrendScore    
+INTO anomaly2
+FROM AnomalyDetectionStep
+WHERE
+    CAST(GetRecordPropertyValue(scores, 'BiLevelChangeScore') as float) >= 3.25
+    OR CAST(GetRecordPropertyValue(scores, 'SlowPosTrendScore') as float) >= 3.25
+    OR CAST(GetRecordPropertyValue(scores, 'SlowNegTrendScore') as float) >= 3.25
+*/
+

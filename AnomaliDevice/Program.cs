@@ -41,17 +41,17 @@
 
                 {
                     Console.Beep();
-                    Console.WriteLine("Doing 2 anomalies");
-                    var currentTemperature = 80;
-                    var currentHumidity = MinHumidity + Rand.NextDouble() * 20;
-                    await SendTelemetryData(currentTemperature, currentHumidity);
-                    await Task.Delay(1000);
-                    await SendTelemetryData(currentTemperature, currentHumidity);
-                    await Task.Delay(1000);
-                    await SendTelemetryData(currentTemperature, currentHumidity);
-                    await Task.Delay(1000);
-                    await SendTelemetryData(currentTemperature, currentHumidity);
-                    await Task.Delay(1000);
+                    Console.WriteLine("Doing 40 with offset på 10 x deviation");
+                    
+                    for (int i = 0; i < 40; i++)
+                    {
+                        var currentTemperature = /*1000 * Rand.NextDouble();*/80 + Rand.NextDouble() * TempDeviation * 10;
+
+                        var currentHumidity = MinHumidity + Rand.NextDouble() * 20;
+                        await SendTelemetryData(currentTemperature, currentHumidity);
+                        await Task.Delay(1000);
+
+                    }
                 }
             }
 
