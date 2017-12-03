@@ -42,7 +42,7 @@
                 {
                     Console.Beep();
                     Console.WriteLine("Doing 40 with offset på 10 x deviation");
-                    
+                     
                     for (int i = 0; i < 40; i++)
                     {
                         var currentTemperature = /*1000 * Rand.NextDouble();*/80 + Rand.NextDouble() * TempDeviation * 10;
