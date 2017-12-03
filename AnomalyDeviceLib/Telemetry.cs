@@ -23,7 +23,7 @@
         private static DeviceClient _deviceClient;
         private static int _messageId = 1;
 
-        private static async void SendDeviceToCloudMessagesAsync(IValueContainer valueContainer)
+        private static async void SendDeviceToCloudMessagesAsync(IValueConf valueContainer)
         {
             while (true)
             {
@@ -62,7 +62,7 @@
             Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, messageString);
         }
 
-        public static void Go(IValueContainer valueContainer)
+        public static void Go(IValueConf valueContainer)
         {
             Console.WriteLine("Anomali device\n");
             _deviceClient = DeviceClient.Create(IotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(DeviceId, DeviceKey), TransportType.Mqtt);

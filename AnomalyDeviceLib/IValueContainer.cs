@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AnomalyDeviceLib
+﻿namespace AnomalyDeviceLib
 {
-    public interface IValueContainer
+    public interface IValueConf
     {
         float Value { get; set; }
         float Deviation { get; set; }
