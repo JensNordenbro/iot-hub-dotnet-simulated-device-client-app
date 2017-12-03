@@ -1,5 +1,5 @@
 
 select * from logger order by time desc
 select * from anomaly
-select * from anomaly2
+--select * from anomaly2
 
