@@ -1,0 +1,2 @@
+UC1: Sample technical signals to trace anormal behavior -> sevice need (Predictive maintanance)
+UC2: Sample Consumption per week -> Optimize purshase and delivery of Coffie
